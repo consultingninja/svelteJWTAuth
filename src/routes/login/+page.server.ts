@@ -42,10 +42,10 @@ export const actions:Actions = {
             }
         }
         finally{
-
+            return loginResponse
         }
 
-        return loginResponse
+
 
 
     }
