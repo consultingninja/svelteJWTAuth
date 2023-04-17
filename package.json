@@ -18,5 +18,10 @@
 		"typescript": "^5.0.0",
 		"vite": "^4.2.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"bcryptjs": "^2.4.3",
+		"jsonwebtoken": "^9.0.0",
+		"mongodb": "^5.2.0"
+	}
 }
