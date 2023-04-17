@@ -34,6 +34,10 @@ $:User = $user;
         background-color: #242424;
         color: #ffffff;
         display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
 
     }
     .top{

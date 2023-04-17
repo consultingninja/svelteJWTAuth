@@ -1,16 +1,11 @@
 <script>
-    import {user} from '../stores';
-    import {layout,primaryColor,secondaryColor,textColor} from '../stores';
-
-    $: thisPrimaryColor = $primaryColor;
-    $: thisSecondaryColor = $secondaryColor;
-    $: thisTextColor = $textColor;
+    import {user,isOnUserStyledPage} from '../stores';
 
     $:thisUser = $user;
 
 </script>
 
-<nav class="nav-base"  class:top={$layout==='top'} class:side={$layout==='side'} style="--theme-primaryColor: {thisPrimaryColor}; --theme-textColor: {thisTextColor}; --theme-secondaryColor: {thisSecondaryColor}">
+<nav class="nav-base" class:default={!$isOnUserStyledPage}  class:top={thisUser?.options.layout ==='top'} class:side={thisUser?.options.layout ==='side'} style="--theme-primaryColor: {thisUser?.palette.primary ?? "#242424"}; --theme-textColor: {thisUser?.palette.text ?? "#FFFFFF"}; --theme-secondaryColor: {thisUser?.palette.secondary ?? "#FFFFFF"}">
     <a href="/">Home</a>
     {#if !thisUser }
     <a href="/signup">Sign Up</a>
@@ -27,6 +22,15 @@
 <style>
     .nav-base{
         display: flex;
+    }
+    .default{
+        width:100%;
+        padding-top: 1em;
+        background: linear-gradient(to right, #FFFFFF, #242424);
+        flex-direction: row;
+        justify-content: center;
+        border-bottom: 1px solid rgba(122, 117, 117,0.3);
+        padding-bottom: 1em;
     }
     .top{
         width:100%;

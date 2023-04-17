@@ -9,12 +9,14 @@
         console.log(e.target.value);
         goto(e.target.value,{noScroll: false})
     }
-    $:User = data?.userMinusPassword;
+    $:User = data?.authedUser;
 
     $:{
-        const newUser = data?.userMinusPassword;
+        const newUser = data?.authedUser;
         user.set(newUser);
     }
+
+    console.log(data);
 
     
 </script>
