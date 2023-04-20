@@ -52,18 +52,19 @@ export  const findUserByUrl = async (collection:Collection,url:string)=>{
 } 
 
 export  const findUserByEmail = async (collection:Collection,email:string)=>{
-    const projection = {email:1,_id:0,password:1}
+    const projection = {email:1,firstName:1,_id:0 }
     const User = await collection.find({email:email}).project(projection).toArray();
     //console.log("Email Find Result",User[0]);
     return JSON.parse(JSON.stringify(User[0],(key,value) => key === "_id"? value.toString(value) : value))
 } 
 
 export  const findUserByEmailWithPassword = async (collection:Collection,email:string)=>{
-    const projection = {email:1,_id:0,password:1, URL:1}
+    const projection = {email:1,_id:0,password:1, URL:1,resetTimer:1}
     const User = await collection.find({email:email}).project(projection).toArray();
     //console.log("Email Find Result",User[0]);
     return JSON.parse(JSON.stringify(User[0],(key,value) => key === "_id"? value.toString(value) : value))
 } 
+
 export const updateUserAdminOptions = async (collection:Collection,user:UserWithoutPassword)=>{
     const result = await collection.findOneAndUpdate(
         { email: user.email },
@@ -72,10 +73,25 @@ export const updateUserAdminOptions = async (collection:Collection,user:UserWith
     return result
 }
 
+export const updateUserPassword = async (collection:Collection,user:User)=>{
+    const result = await collection.findOneAndUpdate(
+        { email: user.email },
+        { $set: {resetToken:undefined ,password:user.password} },
+    );
+    return result
+}
+
+export const setResetToken = async (collection:Collection,user:UserWithoutPassword)=>{
+    const result = await collection.findOneAndUpdate(
+        { email: user.email },
+        { $set: {resetTimer:user.resetTimer} },
+    );
+    return result
+}
+
 export const CheckUserStyledPage = (url:string) => {
-    const nonUserStyledRoutes = ['', '/', '/signup', '/login', '/dashboard'];
-    const pattern = new RegExp(`[^/]*dashboard`);
-    return nonUserStyledRoutes.includes(url) || pattern.test(url);
+    const nonUserStyledRoutes = ['', '/', '/signup', '/login','resetPassword'];
+    return !nonUserStyledRoutes.includes(url);
   };
 
 export  const registerFormToUserWithoutId = async (form:registerFormData):Promise<UserWithoutId> =>{
@@ -86,6 +102,7 @@ export  const registerFormToUserWithoutId = async (form:registerFormData):Promis
         lastName: form.lastName.toString(),
         email:form.email.toString(),
         password: hashedPassword,
+        resetTimer: null,
         options: {
             layout: "top",
             carousel: false,

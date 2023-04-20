@@ -9,7 +9,8 @@ export interface User {
     password: string,
     photos: any[],
     options: Options,
-    palette:Palette
+    palette:Palette,
+    resetTimer: number | null | undefined
 }
 export interface UserWithoutId extends Omit<User, '_id'> {}
 export interface UserWithoutPassword extends Omit<User,'password'>{}

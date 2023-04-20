@@ -1,11 +1,28 @@
 <script>
-    import {user,isOnUserStyledPage} from '../stores';
+    import {user,displayUser} from '../stores';
+    import {page} from '$app/stores';
 
     $:thisUser = $user;
+    $:currentDisplayUser = $displayUser;
+
+    let onUserPage = false;
+    
+    const nonUserPages = ['','/','/signup','/login','/resetPassword','/forgotPassword'];
+    $:{
+        const result = !nonUserPages.includes($page.url.pathname);
+        onUserPage = result;
+        console.log("PATH ",$page.url.pathname)
+        console.log("is on user page",onUserPage);
+        console.log(currentDisplayUser);
+    }
+
+
+
+
 
 </script>
 
-<nav class="nav-base" class:default={!$isOnUserStyledPage}  class:top={thisUser?.options.layout ==='top'} class:side={thisUser?.options.layout ==='side'} style="--theme-primaryColor: {thisUser?.palette.primary ?? "#242424"}; --theme-textColor: {thisUser?.palette.text ?? "#FFFFFF"}; --theme-secondaryColor: {thisUser?.palette.secondary ?? "#FFFFFF"}">
+<nav class="nav-base" class:standard={!onUserPage}  class:top={onUserPage && currentDisplayUser?.options.layout ==='top'} class:side={onUserPage && currentDisplayUser?.options.layout ==='side'} style="--theme-primaryColor: {onUserPage? currentDisplayUser?.palette.primary: "#242424"}; --theme-textColor: {onUserPage? currentDisplayUser?.palette.text : '#FFFFFF'}; --theme-secondaryColor: {onUserPage?currentDisplayUser?.palette.secondary : '#FFFFFF'}">
     <a href="/">Home</a>
     {#if !thisUser }
     <a href="/signup">Sign Up</a>
@@ -23,11 +40,12 @@
     .nav-base{
         display: flex;
     }
-    .default{
+    .standard{
         width:100%;
         padding-top: 1em;
         background: linear-gradient(to right, #FFFFFF, #242424);
         flex-direction: row;
+        align-items: center;
         justify-content: center;
         border-bottom: 1px solid rgba(122, 117, 117,0.3);
         padding-bottom: 1em;
@@ -38,6 +56,7 @@
         background: linear-gradient(to right, var(--theme-secondaryColor), var(--theme-primaryColor));
         flex-direction: row;
         justify-content: center;
+        align-items: center;
         border-bottom: 1px solid rgba(122, 117, 117,0.3);
         padding-bottom: 1em;
 

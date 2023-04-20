@@ -16,11 +16,11 @@
 
 <form use:enhance method="post" action="?/login">
     <div class="form-item">
-        <label for="email">Email<sup><small>*</small></sup></label>
+        <label for="email">Email<sup><small class="required">*</small></sup></label>
         <input value={form?.email??''} id="email" type="email" name="email" required />
     </div>
     <div class="form-item">
-        <label for="password">Password<sup><small>*</small></sup></label>
+        <label for="password">Password<sup><small class="required">*</small></sup></label>
         <input  id="password" type="password" name="password" required />
     </div>
 
@@ -34,6 +34,11 @@
         <button type="submit">Login</button>
     </div>
 
+    <div class="form-item">
+        <a class="reset-link" href="/forgotPassword"><small>Forgot Password?</small></a>
+    </div>
+
+
 </form>
 
 <style>
@@ -43,10 +48,6 @@
     }
     label{
         padding-right: .5em;
-    }
-    small{
-        padding-left: .5em;
-        color: #ff0000;
     }
     button{
         width: 100%;
@@ -65,7 +66,15 @@
         flex-direction: row;
         justify-content: space-between;
     }
-    .fieldError{
-        outline: 2px solid #ff0000;
+    .required{
+            padding-left: .5em;
+            color: #ff0000;
+        }
+    .reset-link{
+            color: #FFFFFF;
+            text-decoration: none;
+    }
+    .reset-link:hover{
+        text-decoration: underline;
     }
 </style>

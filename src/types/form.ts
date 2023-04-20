@@ -42,4 +42,27 @@ export interface adminFormResponse extends adminFormData  {
     formMessage: string,
 }
 
+export interface forgotFormData {
+    email: FormDataEntryValue
+}
+
+export interface forgotFormResponse extends forgotFormData{
+    error: boolean,
+    message: string,
+    [key:string]: any
+
+}
+
+export interface resetformData {
+    password: FormDataEntryValue,
+    confirmPassword:FormDataEntryValue
+}
+
+export interface resetFormResponse {
+    error: boolean,
+    message: string,
+    weakPassword: boolean,
+    [key:string]: any
+}
+
 type layoutOption = 'top' | 'side'
