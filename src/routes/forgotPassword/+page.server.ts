@@ -1,6 +1,5 @@
 import type {Actions,ActionFailure,RequestEvent} from '@sveltejs/kit';
 import type { forgotFormResponse } from '../../types/form';
-import { fail} from '@sveltejs/kit';
 import { findUserByEmail, setResetToken } from '../../backendUtils';
 import { dbConn } from '../../dbConn';
 import { SECRET_RESET,SECRET_EMAIL_KEY } from '$env/static/private';
@@ -15,20 +14,14 @@ export const actions:Actions = {
         let forgotFormResponse:forgotFormResponse = {
             email: email.toString(),
             error: false,
-            message: ''
+            message: 'Check your email!'
         }
-        console.log(email.toString());
+        //console.log(email.toString());
 
         try{
             const collection = await dbConn();
             const attemptToFindUser = await findUserByEmail(collection,email.toString());
             console.log(attemptToFindUser.firstName);
-
-            if(!attemptToFindUser){
-                forgotFormResponse.error = true;
-                forgotFormResponse.message = "Unable to find user."
-                return fail(400,forgotFormResponse)
-            }
 
             if(attemptToFindUser){
                 const userFirstName = attemptToFindUser.firstName.toString();
@@ -37,7 +30,7 @@ export const actions:Actions = {
                 const requireds = {
                     service_id:'service_w24km8h',
                     template_id: 'template_kxmdkzj',
-                    user_id:'K8bFv91-NHrpay_BB',
+                    user_id:'9PiPPOQ9VYKvvq5eF',
                     accessToken:SECRET_EMAIL_KEY,
                     template_params:{
                         email,
@@ -63,25 +56,10 @@ export const actions:Actions = {
                         resetTimer: fiveMins
                     }
                     console.log("updated",updatedUser)
-                    const updateResetToken = await setResetToken(collection,updatedUser);
-                    const updateResetTokenResult = updateResetToken.ok === 1? true : false;
+                    await setResetToken(collection,updatedUser);
 
-                    if(!updateResetTokenResult) {
-                        forgotFormResponse.error = true;
-                        forgotFormResponse.message = "Error setting reset timer, please try again shortly!"
-                    }
-                    if(updateResetTokenResult){
-                        forgotFormResponse.error = false;
-                        forgotFormResponse.message = "Check your email!";
-                    }
-                    
                 }
-                if(response.status === 400){
-                    console.log(response);
-                    forgotFormResponse.error = true;
-                    forgotFormResponse.message = "Error sending email!";
-                    return fail(400,forgotFormResponse)
-                }
+
             }
 
         }
