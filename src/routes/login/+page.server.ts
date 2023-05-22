@@ -37,7 +37,7 @@ export const actions:Actions = {
             if(authAttempt){
                 const {password,...userAttempingLoginMinusPassword} = userAttemptingLogin;
                 const authToken = jwt.sign({authedUser:userAttempingLoginMinusPassword },SECRET_INGREDIENT,{expiresIn:'24h'});
-                cookies.set('authToken',authToken,{httpOnly: true,maxAge: 60 * 60 * 24,sameSite: 'strict'})
+                cookies.set('authToken',authToken,{httpOnly: true,max-age: 60 * 60 * 24,sameSite: 'strict'})
                 throw redirect(302,'/');
             }
         }
